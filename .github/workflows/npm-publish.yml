@@ -1,56 +1,31 @@
-name: Node.js Package
+name: Publish Node Package
 
 on:
-  release:
-    types: [created]
-
+  push:
+    branches:
+      - main
+    paths:
+      - '/**'
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Run Tests
-        run: npm test
-
   publish-npm:
-    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org/
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org/'
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Install dependencies
+        run: npm install
 
-      - name: Check NPM Token Secret
-        id: check_secret
-        run: |
-          if [ -z "${{ secrets.npm_token }}" ]; then
-            echo "Error: NPM Token secret is not set."
-            exit 1
-          fi
-          echo "NPM Token secret is set."
+      - name: Build package
+        run: npm run build
 
       - name: Publish to npm
-        if: steps.check_secret.outcome == 'success'
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          npm publish || exit 1
+        run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
