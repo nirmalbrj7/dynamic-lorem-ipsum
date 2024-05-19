@@ -1,0 +1,21 @@
+{
+  "name": "dynamic-lorem-ipsum",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": ["Dummy", "lorem-ipsum", "generator", "dynamic", "lorem-ipsum-generator", "dynamic-lorem-ipsum", "dynamic-lorem-ipsum-generator"],
+  "author": "Nirmal Adhikari",
+  "license": "MIT",
+  "description": "lorem-ipsum generator",
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "bin": {
+    "dynamic-lorem": "./bin/cli.js"
+  }
+}
